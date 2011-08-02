@@ -598,7 +598,7 @@ Handle<Value> Socket::Recv(const Arguments &args) {
     GET_SOCKET(args);
 
     IncomingMessage msg;
-    if (zmq_recv(socket->socket_, msg, flags) < 0)
+    if (zmq_recvmsg(socket->socket_, msg, flags) < 0)
         return ThrowException(ExceptionFromError());        
     return scope.Close(msg.GetBuffer());
 }
@@ -697,7 +697,7 @@ Handle<Value> Socket::Send(const Arguments &args) {
 
 #if 0  // zero-copy version, but doesn't properly pin buffer and so has GC issues
     OutgoingMessage msg(args[0]->ToObject());
-    if (zmq_send(socket->socket_, msg, flags) < 0)
+    if (zmq_sendmsg(socket->socket_, msg, flags) < 0)
         return ThrowException(ExceptionFromError());
 
 #else // copying version that has no GC issues
@@ -712,7 +712,7 @@ Handle<Value> Socket::Send(const Arguments &args) {
     const char * dat = Buffer::Data(buf);
     std::copy(dat, dat + len, cp);
 
-    if (zmq_send(socket->socket_, &msg, flags) < 0)
+    if (zmq_sendmsg(socket->socket_, &msg, flags) < 0)
         return ThrowException(ExceptionFromError());
 #endif // zero copy / copying version
 
@@ -756,7 +756,9 @@ static void Initialize(Handle<Object> target) {
     HandleScope scope;
 
     NODE_DEFINE_CONSTANT(target, ZMQ_PUB);
+    NODE_DEFINE_CONSTANT(target, ZMQ_XPUB);
     NODE_DEFINE_CONSTANT(target, ZMQ_SUB);
+    NODE_DEFINE_CONSTANT(target, ZMQ_XSUB);
     NODE_DEFINE_CONSTANT(target, ZMQ_REQ);
     NODE_DEFINE_CONSTANT(target, ZMQ_XREQ);
     NODE_DEFINE_CONSTANT(target, ZMQ_REP);
