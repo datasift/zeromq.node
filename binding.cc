@@ -329,16 +329,15 @@ Handle<Value> Socket::GetSockOpt(const Arguments &args) {
 
     // FIXME: How to handle ZMQ_FD on Windows?
     switch (option) {
-    case ZMQ_HWM:
+    case ZMQ_SNDHWM:
+    case ZMQ_RCVHWM:
     case ZMQ_AFFINITY:
     case ZMQ_SNDBUF:
     case ZMQ_RCVBUF:
     case ZMQ_RCVMORE:
         return socket->GetSockOpt<uint64_t>(option);
-    case ZMQ_SWAP:
     case ZMQ_RATE:
     case ZMQ_RECOVERY_IVL:
-    case ZMQ_MCAST_LOOP:
         return socket->GetSockOpt<int64_t>(option);
     case ZMQ_IDENTITY:
         return socket->GetSockOpt<char*>(option);
@@ -349,6 +348,8 @@ Handle<Value> Socket::GetSockOpt(const Arguments &args) {
     case ZMQ_LINGER:
     case ZMQ_RECONNECT_IVL:
     case ZMQ_BACKLOG:
+    case ZMQ_RCVTIME0:
+    case ZMQ_SENDTIME0:
         return socket->GetSockOpt<int>(option);
     case ZMQ_SUBSCRIBE:
     case ZMQ_UNSUBSCRIBE:
@@ -372,15 +373,14 @@ Handle<Value> Socket::SetSockOpt(const Arguments &args) {
     GET_SOCKET(args);
 
     switch (option) {
-    case ZMQ_HWM:
+    case ZMQ_SNDHWM:
+    case ZMQ_RCVHWM:
     case ZMQ_AFFINITY:
     case ZMQ_SNDBUF:
     case ZMQ_RCVBUF:
         return socket->SetSockOpt<uint64_t>(option, args[1]);
-    case ZMQ_SWAP:
     case ZMQ_RATE:
     case ZMQ_RECOVERY_IVL:
-    case ZMQ_MCAST_LOOP:
         return socket->SetSockOpt<int64_t>(option, args[1]);
     case ZMQ_IDENTITY:
     case ZMQ_SUBSCRIBE:
@@ -389,6 +389,8 @@ Handle<Value> Socket::SetSockOpt(const Arguments &args) {
     case ZMQ_LINGER:
     case ZMQ_RECONNECT_IVL:
     case ZMQ_BACKLOG:
+    case ZMQ_RCVTIME0:
+    case ZMQ_SNDTIME0:
         return socket->SetSockOpt<int>(option, args[1]);
     case ZMQ_RCVMORE:
     case ZMQ_EVENTS:
@@ -769,15 +771,14 @@ static void Initialize(Handle<Object> target) {
     NODE_DEFINE_CONSTANT(target, ZMQ_PULL);
     NODE_DEFINE_CONSTANT(target, ZMQ_PAIR);
 
-    NODE_DEFINE_CONSTANT(target, ZMQ_HWM);
-    NODE_DEFINE_CONSTANT(target, ZMQ_SWAP);
+    NODE_DEFINE_CONSTANT(target, ZMQ_SNDHWM);
+    NODE_DEFINE_CONSTANT(target, ZMQ_RCVHWM);
     NODE_DEFINE_CONSTANT(target, ZMQ_AFFINITY);
     NODE_DEFINE_CONSTANT(target, ZMQ_IDENTITY);
     NODE_DEFINE_CONSTANT(target, ZMQ_SUBSCRIBE);
     NODE_DEFINE_CONSTANT(target, ZMQ_UNSUBSCRIBE);
     NODE_DEFINE_CONSTANT(target, ZMQ_RATE);
     NODE_DEFINE_CONSTANT(target, ZMQ_RECOVERY_IVL);
-    NODE_DEFINE_CONSTANT(target, ZMQ_MCAST_LOOP);
     NODE_DEFINE_CONSTANT(target, ZMQ_SNDBUF);
     NODE_DEFINE_CONSTANT(target, ZMQ_RCVBUF);
     NODE_DEFINE_CONSTANT(target, ZMQ_RCVMORE);
@@ -787,13 +788,16 @@ static void Initialize(Handle<Object> target) {
     NODE_DEFINE_CONSTANT(target, ZMQ_LINGER);
     NODE_DEFINE_CONSTANT(target, ZMQ_RECONNECT_IVL);
     NODE_DEFINE_CONSTANT(target, ZMQ_BACKLOG);
+    NODE_DEFINE_CONSTANT(target, ZMQ_RCVTIMEO);
+    NODE_DEFINE_CONSTANT(target, ZMQ_SNDTIMEO);
+    NODE_DEFINE_CONSTANT(target, ZMQ_MULTICAST_HOPS);
 
     NODE_DEFINE_CONSTANT(target, ZMQ_POLLIN);
     NODE_DEFINE_CONSTANT(target, ZMQ_POLLOUT);
     NODE_DEFINE_CONSTANT(target, ZMQ_POLLERR);
 
     NODE_DEFINE_CONSTANT(target, ZMQ_SNDMORE);
-    NODE_DEFINE_CONSTANT(target, ZMQ_NOBLOCK);
+    NODE_DEFINE_CONSTANT(target, ZMQ_DONTWAIT);
 
     NODE_DEFINE_CONSTANT(target, STATE_READY);
     NODE_DEFINE_CONSTANT(target, STATE_BUSY);
