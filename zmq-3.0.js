@@ -215,7 +215,7 @@ Socket.prototype._flush = function() {
   }
   catch (e) {
     e.flags = flags;
-    e.outgoing = sys.inspect(this._outgoing);
+    e.outgoing = util.inspect(this._outgoing);
     try {
       this.emit('error', e);
     } catch (e2) {
