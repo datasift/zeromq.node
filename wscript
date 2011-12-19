@@ -12,7 +12,7 @@ def configure(conf):
     conf.check_tool("compiler_cxx")
     conf.check_tool("node_addon")
     conf.check_cfg(atleast_pkgconfig_version='0.0.0', mandatory=True, errmsg='pkg-config was not found')
-    conf.check_cfg(package='libzmq', uselib_store='ZMQ', atleast_version='3.0.0', args='--cflags --libs')
+    conf.check_cfg(package='libzmq', uselib_store='ZMQ', atleast_version='3.1.0', args='--cflags --libs')
     conf.check(lib='uuid', uselib_store='UUID')
 
 def build(bld):
