@@ -1,7 +1,7 @@
 {
     "name": "zmq-3.0",
-    "version": "2.0.2",
-    "description": "Bindings for node.js to zeromq. Forked from Datasift to support 0MQ3.0",
+    "version": "2.0.3",
+    "description": "Bindings for node.js to zeromq. Forked from Datasift to support 0MQ3.1",
     "main": "zmq-3.0",
     "repository": {
         "type" : "git",
@@ -17,6 +17,7 @@
         "Matt Crocker",
         "Jeremy Barnes <jeremy@barneso.com> (http://www.barneso.com/)",
         "Rick <technoweenie@gmail.com> (http://techno-weenie.net/)",
-        "Corey Jewett (http://syntheticplayground.com/)"
+        "Corey Jewett (http://syntheticplayground.com/)",
+        "TJ Holowaychuck (https://github.com/visionmedia)"
     ]
 }
