@@ -21,9 +21,12 @@
  */
 
 #include <v8.h>
-#include <ev.h>
 #include <node.h>
+#include <node_version.h>
 #include <node_buffer.h>
+#if !NODE_VERSION_AT_LEAST(0, 5, 5)
+#include <ev.h>
+#endif
 #include <zmq.h>
 #include <assert.h>
 #include <stdio.h>
@@ -35,13 +38,13 @@
 using namespace v8;
 using namespace node;
 
+enum {
+    STATE_READY
+  , STATE_BUSY
+  , STATE_CLOSED
+};
+
 namespace zmq {
-
-
-#define STATE_READY  0
-#define STATE_BUSY   1
-#define STATE_CLOSED 2
-
 class Socket;
 
 class Context : ObjectWrap {
@@ -52,8 +55,8 @@ public:
     virtual ~Context();
 
 private:
-    static Handle<Value> New(const Arguments& args);
     Context(int io_threads);
+    static Handle<Value> New(const Arguments& args);
     static Context* GetContext(const Arguments &args);
 
     void Close();
@@ -65,7 +68,6 @@ private:
 class Socket : ObjectWrap {
 public:
     static void Initialize(v8::Handle<v8::Object> target);
-
     virtual ~Socket();
 
 private:
@@ -84,7 +86,13 @@ private:
 
     struct BindState;
     static Handle<Value> Bind(const Arguments &args);
-    static int EIO_DoBind(eio_req *req);
+
+#if NODE_VERSION_AT_LEAST(0, 5, 4)
+      static void EIO_DoBind(eio_req *req);
+#else
+      static int EIO_DoBind(eio_req *req);
+#endif
+
     static int EIO_BindDone(eio_req *req);
     static Handle<Value> BindSync(const Arguments &args);
 
@@ -449,12 +457,19 @@ Handle<Value> Socket::Bind(const Arguments &args) {
     return Undefined();
 }
 
-int Socket::EIO_DoBind(eio_req *req) {
+#if NODE_VERSION_AT_LEAST(0, 5, 4)
+  void
+#else
+  int
+#endif
+  Socket::EIO_DoBind(eio_req *req) {
     BindState* state = (BindState*) req->data;
     if (zmq_bind(state->sock, *state->addr) < 0)
         state->error = zmq_errno();
+#if !NODE_VERSION_AT_LEAST(0, 5, 4)
     return 0;
-}
+#endif
+  }
 
 int Socket::EIO_BindDone(eio_req *req) {
     BindState* state = (BindState*) req->data;

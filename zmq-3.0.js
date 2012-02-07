@@ -4,7 +4,6 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var IOWatcher = process.binding('io_watcher').IOWatcher;
 var zmq = require('./binding');
-var sys = require('sys');
 
 // A map of convenient names to the ZMQ constants for socket types.
 var namemap = (function() {
@@ -216,7 +215,7 @@ Socket.prototype._flush = function() {
   }
   catch (e) {
     e.flags = flags;
-    e.outgoing = sys.inspect(this._outgoing);
+    e.outgoing = util.inspect(this._outgoing);
     try {
       this.emit('error', e);
     } catch (e2) {

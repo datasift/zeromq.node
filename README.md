@@ -1,3 +1,8 @@
+This is a fork of [JustinTulloss:zeromq.node].
+
+It also incorporates many fixes from [TJ Holowaychuck] that were commited to the
+main repo.
+
 This library gives you bindings to ØMQ from node.js. This is not terribly
 well tested, but there is at least one company successfully using these bindings
 in production. Bug reports welcome.
@@ -5,14 +10,22 @@ in production. Bug reports welcome.
 To Install
 ==========
 
-First, get [ØMQ 3.0], [Homebrew] on Mac will get you what you need.
-Debian/Ubuntu users may also need to install the `libev-dev` package.
+First, Install ØMQ 3.1.0 from source:
+
+    $ sudo apt-get install libev-dev
+    $ sudo apt-get install pkg-config
+    $ sudo apt-get install uuid-dev
+    $ git clone git://github.com/zeromq/libzmq
+    $ cd libzmq
+    $ git checkout v3.1.0
+    $ sudo ./autogen.sh && sudo ./configure && sudo make && sudo make install
+    $ sudo ldconfig
 
 Then use [npm] to install zeromq.node:
 
-    $ npm install zmq
+    $ sudo npm install zmq-3.0
 
-`npm` will yell at you if you don't have node 0.3.0, as that is required.
+`npm` will yell at you if you don't have node 0.5.0 (preferably node 0.6.x), as that is required.
 
 API
 ===
@@ -24,7 +37,7 @@ described in the ØMQ documentation occur.
 
 First, include the module:
 
-    zmq = require('zmq');
+    zmq = require('zmq-3.0');
 
 After that, you can create sockets with:
 
@@ -134,8 +147,8 @@ Licensed under the very permissive [MIT License].
 
 [node.js]: http://github.com/ry/node
 [npm]: https://github.com/isaacs/npm
-[ØMQ 2.1]: http://www.zeromq.org/intro:get-the-software
-[Homebrew]: http://mxcl.github.com/homebrew/
+[JustinTulloss:zeromq.node]: https://github.com/JustinTulloss/zeromq.node
+[TJ Holowaychuck]: https://github.com/visionmedia
 [ØMQ API]: http://api.zeromq.org/
 [ØMQ setsockopt API]: http://api.zeromq.org/2-1-3:zmq-setsockopt
 [zmq_socket]: http://api.zeromq.org/zmq_socket.html
