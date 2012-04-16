@@ -1,8 +1,8 @@
 {
-    "name": "zmq-3.0",
+    "name": "zeromq",
     "version": "2.0.3",
     "description": "Bindings for node.js to zeromq. Forked from Datasift to support 0MQ3.1",
-    "main": "zmq-3.0",
+    "main": "zeromq",
     "repository": {
         "type" : "git",
         "url" : "http://github.com/shripadk/zeromq.node.git"
