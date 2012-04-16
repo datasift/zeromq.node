@@ -5,11 +5,11 @@
     "main": "zmq",
     "repository": {
         "type" : "git",
-        "url" : "http://github.com/JustinTulloss/zeromq.node.git"
+        "url" : "http://github.com/datasift/zeromq.node.git"
     },
-    "engines": {
-        "node": ">=0.3.0"
-    },
+    "engines": 
+        [ "node >= 0.3.0" ]
+    ,
     "contributors": [
         "Justin Tulloss <justin.tulloss@gmail.com> (http://justin.harmonize.fm)",
         "Stéphan Kochen <stephan@kochen.nl> (http://stephan.kochen.nl/)",
