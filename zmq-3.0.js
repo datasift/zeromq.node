@@ -24,6 +24,9 @@ var namemap = (function() {
   return m;
 })();
 
+// Prevent GC from touching connect and bindSync
+function gcWrap (self) {}
+
 // Context management happens here. We lazily initialize a default context,
 // and use that everywhere. Also cleans up on exit.
 var context_ = null;
@@ -120,6 +123,7 @@ Socket.prototype.bindSync = function(addr) {
   self._watcher.stop();
   try {
     self._zmq.bindSync(addr);
+    setTimeout(gcWrap, 0, this);
   } catch (e) {
     self._watcher.start();
     throw e;
@@ -129,6 +133,8 @@ Socket.prototype.bindSync = function(addr) {
 
 Socket.prototype.connect = function(addr) {
   this._zmq.connect(addr);
+  setTimeout(gcWrap, 0, this);
+  return this;
 };
 
 // `subscribe` and `unsubcribe` are exposed as methods.
